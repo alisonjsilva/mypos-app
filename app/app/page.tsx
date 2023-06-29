@@ -48,7 +48,7 @@ export default function Home() {
                     </CardContent>
                   </Card>
                 )
-              })
+              }) || <div className='text-center'>Nenhuma transação encontrada</div>
           }
         </CardContent>
       </Card >

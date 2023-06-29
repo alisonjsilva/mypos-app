@@ -1,12 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CalendarIcon } from "@radix-ui/react-icons"
+import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { pt } from 'date-fns/locale';
-
+import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -52,8 +52,11 @@ export function CalendarForm({ setTransactions }: CalendarFormProps) {
         resolver: zodResolver(FormSchema),
     })
 
+    const [date, setDate] = React.useState<Date>()
+    const [loading, setLoading] = React.useState(false)
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
+        setLoading(true);
         const startDate = new Date(data.dob);
         const endDate = new Date(data.dob);
         startDate.setHours(2);
@@ -61,6 +64,7 @@ export function CalendarForm({ setTransactions }: CalendarFormProps) {
         console.log(startDate.toISOString(), endDate.toISOString());
         const transactionsResult = await getTransactions(startDate, endDate);
         setTransactions(transactionsResult.requestTransactionsResult.transactions);
+        setLoading(false);
 
         toast({
             title: "You submitted the following values:",
@@ -105,7 +109,7 @@ export function CalendarForm({ setTransactions }: CalendarFormProps) {
                                         mode="single"
                                         locale={pt}
                                         selected={field.value}
-                                        onSelect={field.onChange}
+                                        onSelect={(date) => field.onChange(date as Date)}
                                         disabled={(date) =>
                                             date > new Date() || date < new Date("1900-01-01")
                                         }
@@ -120,7 +124,14 @@ export function CalendarForm({ setTransactions }: CalendarFormProps) {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submeter</Button>
+                <Button type="submit" disabled={loading}>
+                    {loading &&
+                        (
+                            <><ReloadIcon className="mr-2 h-4 w-4 animate-spin" />Aguarde</>
+                        ) || "Submeter"
+                    }
+                    
+                </Button>
             </form>
         </Form>
     )
