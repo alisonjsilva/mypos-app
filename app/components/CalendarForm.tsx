@@ -54,6 +54,7 @@ export function CalendarForm({ setTransactions }: CalendarFormProps) {
 
     const [date, setDate] = React.useState<Date>()
     const [loading, setLoading] = React.useState(false)
+    const [calendarOpen, setCalendarOpen] = useState(false);
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         setLoading(true);
@@ -85,7 +86,7 @@ export function CalendarForm({ setTransactions }: CalendarFormProps) {
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel>Data dos movimentos:</FormLabel>
-                            <Popover>
+                            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                                 <PopoverTrigger asChild>
                                     <FormControl>
                                         <Button
@@ -109,7 +110,10 @@ export function CalendarForm({ setTransactions }: CalendarFormProps) {
                                         mode="single"
                                         locale={pt}
                                         selected={field.value}
-                                        onSelect={(date) => field.onChange(date as Date)}
+                                        onSelect={(date) => {
+                                            field.onChange(date as Date);
+                                            setCalendarOpen(false); // close the calendar
+                                        }}
                                         disabled={(date) =>
                                             date > new Date() || date < new Date("1900-01-01")
                                         }
