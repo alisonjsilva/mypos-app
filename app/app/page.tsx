@@ -1,8 +1,10 @@
 'use client'
 import { CalendarForm } from '@/components/CalendarForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { LoginLink } from '@kinde-oss/kinde-auth-nextjs'
 import Image from 'next/image'
 import { use, useEffect, useState } from 'react'
+import { BiLogIn } from 'react-icons/bi'
 
 export interface TransactionProps {
   date: string;
@@ -13,19 +15,23 @@ export interface TransactionProps {
 }
 
 export default function Home() {
-  const [transactions, setTransactions] = useState<TransactionProps[]>([])
-  const [total, setTotal] = useState<number>(0)
-  console.log(transactions)
-  const transactionsFiltered = transactions?.filter((transaction) => transaction.terminal_id == '90381857')
-  const totalFiltered = transactionsFiltered?.reduce((acc, transaction) => acc + transaction.original_amount, 0)
-  useEffect(() => {
-    setTotal(totalFiltered)
-  }, [transactionsFiltered, totalFiltered])
+  // const [transactions, setTransactions] = useState<TransactionProps[]>([])
+  // const [total, setTotal] = useState<number>(0)
+  // console.log(transactions)
+  // const transactionsFiltered = transactions?.filter((transaction) => transaction.terminal_id == '90381857')
+  // const totalFiltered = transactionsFiltered?.reduce((acc, transaction) => acc + transaction.original_amount, 0)
+  // useEffect(() => {
+  //   setTotal(totalFiltered)
+  // }, [transactionsFiltered, totalFiltered])
 
 
   return (
-    <main className="">
-      <Card className='w-full'>
+    <main className="flex flex-col p-5 items-center justify-center">
+      Fabius Barbershop
+      <LoginLink className='flex gap-2 items-center'>
+        <BiLogIn /> Login
+      </LoginLink>
+      {/* <Card className='w-full'>
         <CardHeader>
           <CardTitle className='mb-8'>Transações Fabius Barbershop</CardTitle>
           <CalendarForm setTransactions={setTransactions} />
@@ -65,7 +71,7 @@ export default function Home() {
                 }) : <div className='text-center'>Nenhuma transação encontrada</div>
           }
         </CardContent>
-      </Card >
+      </Card > */}
     </main >
   )
 }
